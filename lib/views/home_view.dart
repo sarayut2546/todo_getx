@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:todo_getx/controllers/auth_controller.dart';
 import 'package:todo_getx/controllers/todo_controller.dart';
 import 'package:todo_getx/models/todo_model.dart';
 import 'package:todo_getx/views/add_todo_view.dart';
 
-// ignore: must_be_immutable
+/// ignore: must_be_immutable
 class HomeView extends StatelessWidget {
   HomeView({super.key});
-
+ 
   TodoController todoController = Get.put(TodoController());
-
+  AuthController authController = Get.put(AuthController());
   @override
   Widget build(BuildContext context) {
+    todoController.fetchTodos();
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -20,10 +22,14 @@ class HomeView extends StatelessWidget {
         ),
         backgroundColor: Colors.green,
         centerTitle: true,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
-        ),
-        elevation: 0,
+        actions: [
+          IconButton(
+              icon: Icon(Icons.logout),
+              onPressed: () {
+                todoController.clearTodo();
+                authController.logout();
+              })
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
@@ -49,9 +55,8 @@ class HomeView extends StatelessWidget {
                         title: Text(
                           todo.title,
                           style: TextStyle(
-                            decoration: todo.isDone
-                                ? TextDecoration.lineThrough
-                                : null,
+                            decoration:
+                                todo.isDone ? TextDecoration.lineThrough : null,
                           ),
                         ),
                         subtitle: todo.subtitle.isEmpty
@@ -97,5 +102,3 @@ class HomeView extends StatelessWidget {
     );
   }
 }
-
- 
