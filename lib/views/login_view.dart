@@ -1,61 +1,62 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:todo_getx/controllers/auth_controller.dart';
 import 'package:todo_getx/views/register_view.dart';
 import 'package:todo_getx/widgets/app_text_field.dart';
- 
+
 // ignore: must_be_immutable
 class LoginView extends StatelessWidget {
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
- 
+  LoginView({super.key});
+
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
   AuthController authController = Get.put(AuthController());
 
-  LoginView({super.key});
- 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('เข้าสู่ระบบ'), backgroundColor: Colors.teal),
+      appBar: AppBar(
+        title: Text("เข้าสู่ระบบ"),
+        backgroundColor: Colors.greenAccent,
+      ),
       body: Container(
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            AppTextField(label: 'อีเมล', controller: emailController),
+            AppTextField(
+              label: "อีเมล",
+              controller: emailController,
+              hintText: "กรุณากรอกอีเมล",
+              keyboardType: TextInputType.emailAddress,
+            ),
             SizedBox(height: 10),
             AppTextField(
-              label: 'รหัสผ่าน',
+              label: "รหัสผ่าน",
               controller: passwordController,
+              hintText: "กรุณากรอกรหัสผ่าน",
+              keyboardType: TextInputType.text,
               hideText: true,
             ),
             SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
                 if (!GetUtils.isEmail(emailController.text)) {
-                  Get.snackbar(
-                    "Error",
-                    "กรุณากรอกรหัสผ่านให้ครบ อย่างน้อย 6 ตัว",
-                    backgroundColor: const Color.fromARGB(255, 216, 4, 4),
-                    colorText: Colors.amber,
-                  );
+                  Get.snackbar("Error", "กรุณากรอกอีเมลให้ถูกต้อง");
                   return;
                 }
                 if (passwordController.text.length < 6) {
-                  Get.snackbar(
-                    "Error",
-                    "กรอก Password ดิ๊",
-                    backgroundColor: Colors.redAccent,
-                    colorText: Colors.black,
-                  );
+                  Get.snackbar("Error", "กรุณากรอกรหัสผ่านอย่างน้อย 6 ตัว");
                   return;
                 }
- 
+                // logic
                 authController.login(
                   emailController.text,
                   passwordController.text,
                 );
               },
-              child: const Text('เข้าสู่ระบบ'),
+              child: Text("เข้าสู่ระบบ"),
             ),
             SizedBox(height: 10),
             ElevatedButton(

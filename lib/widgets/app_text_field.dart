@@ -9,7 +9,7 @@ class AppTextField extends StatelessWidget {
   const AppTextField({super.key, 
   required this.label,
    required this.controller,
-   this.hideText = false
+   this.hideText = false, required String hintText, required TextInputType keyboardType
    });
 
   @override

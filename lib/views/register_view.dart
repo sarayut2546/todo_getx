@@ -1,72 +1,75 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:todo_getx/controllers/auth_controller.dart';
 import 'package:todo_getx/widgets/app_text_field.dart';
- 
 // ignore: must_be_immutable
 class RegisterView extends StatelessWidget {
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  final confirmPasswordController = TextEditingController();
- 
+  RegisterView({super.key});
+
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
+
   AuthController authController = Get.put(AuthController());
 
-  RegisterView({super.key});
- 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('สมัครสมาชิก'), backgroundColor: Colors.teal),
+      appBar: AppBar(
+        title: Text("สมัครสามชิก"),
+        backgroundColor: Colors.greenAccent,
+      ),
       body: Container(
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            AppTextField(label: 'อีเมล', controller: emailController),
-            SizedBox(height: 10),
-            AppTextField(label: 'รหัสผ่าน', controller: passwordController),
+            AppTextField(
+              label: "อีเมล",
+              controller: emailController,
+              hintText: "กรุณากรอกอีเมล",
+              keyboardType: TextInputType.emailAddress,
+            ),
             SizedBox(height: 10),
             AppTextField(
-              label: 'ยืนยันรหัสผ่าน',
+              label: "รหัสผ่าน",
+              controller: passwordController,
+              hintText: "กรุณากรอกรหัสผ่าน",
+              keyboardType: TextInputType.text,
+              hideText: true,
+            ),
+            SizedBox(height: 10),
+            AppTextField(
+              label: "ยืนยันรหัสผ่าน",
               controller: confirmPasswordController,
+              hintText: "กรุณากรอกยืนยันรหัสผ่าน",
+              keyboardType: TextInputType.text,
               hideText: true,
             ),
             SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
                 if (!GetUtils.isEmail(emailController.text)) {
-                  Get.snackbar(
-                    "Error",
-                    "กรุณากรอกรหัสผ่านให้ครบ อย่างน้อย 6 ตัว",
-                    backgroundColor: const Color.fromARGB(255, 216, 4, 4),
-                    colorText: Colors.amber,
-                  );
+                  Get.snackbar("Error", "กรุณากรอกอีเมลให้ถูกต้อง");
                   return;
                 }
                 if (passwordController.text.length < 6) {
-                  Get.snackbar(
-                    "Error",
-                    "กรอก Password ดิ๊",
-                    backgroundColor: Colors.redAccent,
-                    colorText: Colors.black,
-                  );
+                  Get.snackbar("Error", "กรุณากรอกรหัสผ่านอย่างน้อย 6 ตัว");
                   return;
                 }
                 if (passwordController.text != confirmPasswordController.text) {
-                  Get.snackbar(
-                    "Error",
-                    "Password ไม่ตรงกันจ้าสาว",
-                    backgroundColor: Colors.red,
-                    colorText: Colors.black,
-                  );
+                  Get.snackbar("Error", "กรุณากรอกรหัสผ่านให้ตรงกัน");
                   return;
                 }
+                // logic สมัครสมาชิกจะอยู่นี่
                 authController.register(
                   emailController.text,
                   passwordController.text,
                 );
                 Get.back();
               },
-              child: const Text('สมัครสมาชิก'),
+              child: Text("สมัคร"),
             ),
           ],
         ),

@@ -5,12 +5,13 @@ import 'package:todo_getx/controllers/todo_controller.dart';
 import 'package:todo_getx/models/todo_model.dart';
 import 'package:todo_getx/views/add_todo_view.dart';
 
-/// ignore: must_be_immutable
+// ignore: must_be_immutable
 class HomeView extends StatelessWidget {
   HomeView({super.key});
- 
+
   TodoController todoController = Get.put(TodoController());
   AuthController authController = Get.put(AuthController());
+
   @override
   Widget build(BuildContext context) {
     todoController.fetchTodos();
@@ -24,11 +25,12 @@ class HomeView extends StatelessWidget {
         centerTitle: true,
         actions: [
           IconButton(
-              icon: Icon(Icons.logout),
-              onPressed: () {
-                todoController.clearTodo();
-                authController.logout();
-              })
+            icon: Icon(Icons.logout),
+            onPressed: () {
+              todoController.clearTodo();
+              authController.logout();
+            },
+          ),
         ],
       ),
       body: Padding(
@@ -59,11 +61,8 @@ class HomeView extends StatelessWidget {
                                 todo.isDone ? TextDecoration.lineThrough : null,
                           ),
                         ),
-                        subtitle: todo.subtitle.isEmpty
-                            ? null
-                            : Text(
-                                todo.subtitle,
-                              ),
+                        subtitle:
+                            todo.subtitle.isEmpty ? null : Text(todo.subtitle),
                         leading: Checkbox(
                           value: todo.isDone,
                           onChanged: (bool? newValue) {
@@ -72,13 +71,13 @@ class HomeView extends StatelessWidget {
                         ),
                         trailing: IconButton(
                           onPressed: () {
-                            todoController.deleteTodo(index);
+                            todoController.deleteTodo(todo.docId ?? '');
                           },
-                          icon: const Icon(
-                            Icons.delete,
-                            color: Colors.red,
-                          ),
+                          icon: const Icon(Icons.delete, color: Colors.red),
                         ),
+                        onTap: ()  {
+                          Get.to(AddTodoView(todo: todo));
+                        },
                       ),
                     );
                   },
@@ -92,10 +91,7 @@ class HomeView extends StatelessWidget {
         onPressed: () {
           Get.to(AddTodoView());
         },
-        child: const Icon(
-          Icons.add,
-          size: 30,
-        ),
+        child: const Icon(Icons.add, size: 30),
         backgroundColor: Colors.green,
         elevation: 0,
       ),
